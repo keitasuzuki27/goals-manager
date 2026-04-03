@@ -5,7 +5,7 @@
     <h2 class="modal-title">新しい大目標を追加</h2>
     <p class="modal-subtitle">タイトルと締切日を設定します</p>
 
-    <form class="goal-form" method="post" action="">
+    <form class="goal-form" method="post" action="/goals/create">
       <div class="form-group">
         <label for="goal-title">タイトル</label>
         <input

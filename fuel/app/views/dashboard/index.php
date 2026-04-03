@@ -16,9 +16,11 @@
                 <h2>大目標一覧</h2>
 
                 <ul class="goal-menu">
-                    <li class="active">🇪🇸 スペイン語を学ぶ</li>
-                    <li>👟 フルマラソン完走</li>
-                    <li>🪴 家庭菜園を始める</li>
+                    <?php foreach ($goals as $index => $goal): ?>
+                        <li class="<?= $index === 0 ? 'active' : '' ?>">
+                            <?= $goal['title'] ?>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
 
                 <button class="add-goal">＋ 新しい大目標を追加</button>
