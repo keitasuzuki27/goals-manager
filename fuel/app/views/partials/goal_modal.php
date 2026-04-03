@@ -12,8 +12,7 @@
           type="text"
           id="goal-title"
           name="title"
-          placeholder="例：スペイン語を学ぶ"
-        >
+          placeholder="例：スペイン語を学ぶ">
       </div>
 
       <div class="form-group">
@@ -21,8 +20,7 @@
         <input
           type="date"
           id="goal-deadline"
-          name="deadline"
-        >
+          name="deadline">
       </div>
 
       <div class="modal-actions">

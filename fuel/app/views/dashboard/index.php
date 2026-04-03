@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/assets/css/dashboard.css">
     <link rel="stylesheet" href="/assets/css/modal.css">
 </head>
+
 <body>
     <div class="dashboard">
         <aside class="sidebar">
@@ -107,8 +109,10 @@
                     <button class="add-task-button">＋ 小タスクを追加</button>
                 </div>
             </section>
-        </main>               
+        </main>
     </div>
-    <?php echo View::forge('partials/modal'); ?>
+    <?php echo View::forge('partials/goal_modal'); ?>
+    <script src="/assets/js/modal.js"></script>
 </body>
+
 </html>
