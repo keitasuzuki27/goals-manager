@@ -1,6 +1,6 @@
-<div id="goal-modal" class="modal">
+<div id="add-goal-modal" class="modal">
   <div class="modal-card">
-    <button type="button" class="modal-close" id="close-goal-modal">×</button>
+    <button type="button" class="modal-close" id="close-add-goal-modal">×</button>
 
     <h2 class="modal-title">新しい大目標を追加</h2>
     <p class="modal-subtitle">タイトルと締切日を設定します</p>
@@ -24,7 +24,7 @@
       </div>
 
       <div class="modal-actions">
-        <button type="button" class="cancel-button" id="cancel-goal-modal">キャンセル</button>
+        <button type="button" class="cancel-button" id="cancel-add-goal-modal">キャンセル</button>
         <button type="submit" class="save-button">保存する</button>
       </div>
     </form>

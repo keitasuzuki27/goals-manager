@@ -15,4 +15,31 @@ class Controller_Goals extends Controller
 
         return Response::redirect('dashboard/index');
     }
+
+    public function action_update()
+    {
+        $id = Input::post('id');
+        $title = Input::post('title');
+        $deadline = Input::post('deadline');
+
+        DB::update('goals')->set([
+            'title' => $title,
+            'deadline' => $deadline,
+        ])
+        ->where('id' , '=', $id)
+        ->execute();
+
+        return Response::redirect('dashboard/index');
+    }
+
+    public function action_delete()
+    {
+        $id = Input::post('id');
+
+        DB::delete('goals')
+        ->where('id' , '=', $id)
+        ->execute();
+
+        return Response::redirect('dashboard/index');
+    }
 }

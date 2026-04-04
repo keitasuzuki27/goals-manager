@@ -7,6 +7,7 @@
     <title>Goals Manager Dashboard</title>
     <link rel="stylesheet" href="/assets/css/dashboard.css">
     <link rel="stylesheet" href="/assets/css/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
                     <?php endforeach; ?>
                 </ul>
 
-                <button class="add-goal">＋ 新しい大目標を追加</button>
+                <button class="add-goal-button">＋ 新しい大目標を追加</button>
             </div>
 
             <div class="sidebar-bottom">
@@ -34,8 +35,17 @@
         </aside>
 
         <main class="main">
+
+        <!-- update -->
             <div class="top-bar">
-                <button class="menu-button">⋮</button>
+                <button type="button" class="icon-button update-goal">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+        <!-- delete -->
+
+                <button type="button" class="icon-button delete-goal">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </div>
 
             <section class="content-card">
@@ -115,9 +125,16 @@
             </section>
         </main>
     </div>
-    <?php echo View::forge('partials/goal_modal'); ?>
-    <script src="/assets/js/modal.js"></script>
-    <script src="/assets/js/dropdown.js"></script>
+    <?php echo View::forge('partials/add_goal_modal'); ?>
+    <?php echo View::forge('partials/update_goal_modal', [
+        'selected_goal' => $selected_goal,
+    ], false); ?>
+    <?php echo View::forge('partials/delete_goal_modal', [
+        'selected_goal' => $selected_goal,
+    ], false); ?>
+    <script src="/assets/js/add_goal_modal.js"></script>
+    <script src="/assets/js/update_goal_modal.js"></script>
+    <script src="/assets/js/delete_goal_modal.js"></script>
 </body>
 
 </html>
