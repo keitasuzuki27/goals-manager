@@ -16,9 +16,11 @@
                 <h2>大目標一覧</h2>
 
                 <ul class="goal-menu">
-                    <?php foreach ($goals as $index => $goal): ?>
-                        <li class="<?= $index === 0 ? 'active' : '' ?>">
-                            <?= $goal['title'] ?>
+                    <?php foreach ($goals as $goal): ?>
+                        <li class="<?= $selected_goal && $selected_goal['id'] == $goal['id'] ? 'active' : '' ?>">
+                            <a href="/dashboard?id=<?= $goal['id'] ?>">
+                                <?= $goal['title'] ?>
+                            </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -37,8 +39,8 @@
             </div>
 
             <section class="content-card">
-                <h1 class="goal-title">🇪🇸 スペイン語を学ぶ</h1>
-                <p class="goal-deadline">期限: 2026年11月24日</p>
+                <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
+                <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
 
                 <div class="progress-wrapper">
                     <div class="progress-line">
@@ -115,6 +117,7 @@
     </div>
     <?php echo View::forge('partials/goal_modal'); ?>
     <script src="/assets/js/modal.js"></script>
+    <script src="/assets/js/dropdown.js"></script>
 </body>
 
 </html>

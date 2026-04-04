@@ -22,9 +22,14 @@ services:
       MYSQL_DATABASE: goals-manager
     ports:
       - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
     networks:
       - fuelphp-network
 
 networks:
   fuelphp-network:
     driver: bridge
+
+volumes:
+  db-data:
