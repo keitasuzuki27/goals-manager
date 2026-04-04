@@ -132,9 +132,7 @@
     <?php echo View::forge('partials/delete_goal_modal', [
         'selected_goal' => $selected_goal,
     ], false); ?>
-    <script src="/assets/js/add_goal_modal.js"></script>
-    <script src="/assets/js/update_goal_modal.js"></script>
-    <script src="/assets/js/delete_goal_modal.js"></script>
+    <script src="/assets/js/goal_modal.js"></script>
 </body>
 
 </html>
