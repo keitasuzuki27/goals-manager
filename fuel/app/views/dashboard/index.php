@@ -36,12 +36,12 @@
 
         <main class="main">
 
-        <!-- update -->
+            <!-- update -->
             <div class="top-bar">
                 <button type="button" class="icon-button update-goal">
                     <i class="fa-solid fa-pen"></i>
                 </button>
-        <!-- delete -->
+                <!-- delete -->
 
                 <button type="button" class="icon-button delete-goal">
                     <i class="fa-solid fa-trash"></i>
@@ -125,9 +125,27 @@
             </section>
         </main>
     </div>
-    <?php echo View::forge('partials/add_goal_modal'); ?>
-    <?php echo View::forge('partials/update_goal_modal', [
-        'selected_goal' => $selected_goal,
+    <?php echo View::forge('partials/goal_modal', [
+        'goal_modal_id' => 'add-goal-modal',
+        'close_goal_modal_id' => 'close-add-goal-modal',
+        'modal_title' => '新しい大目標を追加',
+        'modal_subtitle' => 'タイトルと締切日を設定します',
+        'goal_form_action' => '/goals/create',
+        'goal_title_id' => 'add-goal-title',
+        'goal_deadline_id' => 'add-goal-deadline',
+        'cancel_goal_modal_id' => 'cancel-add-goal-modal',
+        'goal' => [],
+    ]); ?>
+    <?php echo View::forge('partials/goal_modal', [
+        'goal_modal_id' => 'update-goal-modal',
+        'close_goal_modal_id' => 'close-update-goal-modal',
+        'modal_title' => '大目標を編集',
+        'modal_subtitle' => 'タイトルと締切日を設定します',
+        'goal_form_action' => '/goals/update',
+        'goal_title_id' => 'update-goal-title',
+        'goal_deadline_id' => 'update-goal-deadline',
+        'cancel_goal_modal_id' => 'cancel-update-goal-modal',
+        'goal' => $selected_goal,
     ], false); ?>
     <?php echo View::forge('partials/delete_goal_modal', [
         'selected_goal' => $selected_goal,

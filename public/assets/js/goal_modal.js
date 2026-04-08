@@ -1,3 +1,5 @@
+// モーダルの開閉
+
 function setupModal({
     openSelector,
     modalId,
@@ -36,6 +38,7 @@ function setupModal({
     });
 }
 
+// モーダルの開閉(Create)
 setupModal({
     openSelector: ".add-goal-button",
     modalId: "add-goal-modal",
@@ -43,6 +46,7 @@ setupModal({
     cancelId: "cancel-add-goal-modal"
 });
 
+// モーダルの開閉(Update)
 setupModal({
     openSelector: ".update-goal",
     modalId: "update-goal-modal",
@@ -50,6 +54,7 @@ setupModal({
     cancelId: "cancel-update-goal-modal"
 });
 
+// モーダルの開閉(Delete)
 setupModal({
     openSelector: ".delete-goal",
     modalId: "delete-goal-modal",
