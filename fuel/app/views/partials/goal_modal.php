@@ -1,4 +1,4 @@
-<!-- CreateとUpdateのモーダル -->
+<!-- goalsのCreateとUpdateのモーダル -->
 
 <div id="<?= $goal_modal_id ?>" class="modal">
   <div class="modal-card">
@@ -7,7 +7,7 @@
     <h2 class="modal-title"><?= $modal_title ?></h2>
     <p class="modal-subtitle"><?= $modal_subtitle ?></p>
 
-    <form class="goal-form" method="post" action="<?= $goal_form_action ?>">
+    <form class="modal-form" method="post" action="<?= $goal_form_action ?>">
       <div class="form-group">
         <label for="<?= $goal_title_id ?>">タイトル</label>
         <input
@@ -28,7 +28,7 @@
       </div>
 
       <?php if (!empty($goal['id'])): ?>
-        <input type="hidden" name="id" value="<?= e($goal['id']) ?>">
+        <input type="hidden" name="goal_id" value="<?= e($goal['id']) ?>">
       <?php endif; ?>
 
       <div class="modal-actions">

@@ -40,15 +40,15 @@ function setupModal({
 
 // モーダルの開閉(Create)
 setupModal({
-    openSelector: ".add-goal-button",
-    modalId: "add-goal-modal",
-    closeId: "close-add-goal-modal",
-    cancelId: "cancel-add-goal-modal"
+    openSelector: ".create-goal-button",
+    modalId: "create-goal-modal",
+    closeId: "close-create-goal-modal",
+    cancelId: "cancel-create-goal-modal"
 });
 
 // モーダルの開閉(Update)
 setupModal({
-    openSelector: ".update-goal",
+    openSelector: ".update-goal-button",
     modalId: "update-goal-modal",
     closeId: "close-update-goal-modal",
     cancelId: "cancel-update-goal-modal"
@@ -56,7 +56,7 @@ setupModal({
 
 // モーダルの開閉(Delete)
 setupModal({
-    openSelector: ".delete-goal",
+    openSelector: ".delete-goal-button",
     modalId: "delete-goal-modal",
     closeId: "close-delete-goal-modal",
     cancelId: "cancel-delete-goal-modal"

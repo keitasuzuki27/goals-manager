@@ -26,7 +26,7 @@
                     <?php endforeach; ?>
                 </ul>
 
-                <button class="add-goal-button">＋ 新しい大目標を追加</button>
+                <button class="create-goal-button">＋ 新しい大目標を追加</button>
             </div>
 
             <div class="sidebar-bottom">
@@ -38,12 +38,12 @@
 
             <!-- update -->
             <div class="top-bar">
-                <button type="button" class="icon-button update-goal">
+                <button type="button" class="icon-button update-goal-button">
                     <i class="fa-solid fa-pen"></i>
                 </button>
                 <!-- delete -->
 
-                <button type="button" class="icon-button delete-goal">
+                <button type="button" class="icon-button delete-goal-button">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
@@ -80,60 +80,58 @@
                     </div>
                 </div>
 
+                <!-- tasks一覧 -->
                 <div class="task-list">
-                    <div class="task-card">
-                        <div class="task-info">
-                            <div class="task-title">1. 文法の基礎を学ぶ</div>
-                        </div>
-                        <button class="complete-button">完了</button>
-                    </div>
+                    <?php foreach ($tasks as $task): ?>
+                        <div class="task-card <?= $task['is_done'] ? 'done' : '' ?>">
+                            <div class="task-info">
+                                <div class="task-title"><?= $task['title'] ?></div>
+                                <div class="task-meta"><?= $task['deadline'] ?></div>
+                            </div>
+                            <div class="task-actions">
+                                <form class="task-toggle-form" method="post" action="/tasks/toggle">
+                                    <input type="hidden" name="task_id" value="<?= e($task['id']) ?>">
+                                    <input type="hidden" name="goal_id" value="<?= $selected_goal['id'] ?>">
+                                    <button class="complete-button">完了</button>
+                                </form>
+                                <div class="task-edit-delete">
+                                    <!-- data属性でtask_modal.jsにデータを渡す -->
+                                    <button
+                                        class="update-task-button"
+                                        type="button"
+                                        data-task-id="<?= $task['id'] ?>"
+                                        data-task-title="<?= $task['title'] ?>"
+                                        data-task-deadline="<?= $task['deadline'] ?>">
+                                        編集
+                                    </button>
 
-                    <div class="task-card">
-                        <div class="task-info">
-                            <div class="task-title">2. YouTube動画を5本見る</div>
-                            <div class="task-meta">今日</div>
+                                    <button
+                                        class="delete-task-button"
+                                        type="button"
+                                        data-task-id="<?= $task['id'] ?>"
+                                        data-task-title="<?= $task['title'] ?>">
+                                        削除
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <button class="complete-button">完了</button>
-                    </div>
+                    <?php endforeach; ?>
 
-                    <div class="task-card">
-                        <div class="task-info">
-                            <div class="task-title">3. 小説を3冊読む</div>
-                            <div class="task-meta">残り35日</div>
-                        </div>
-                        <button class="complete-button">完了</button>
-                    </div>
-
-                    <div class="task-card">
-                        <div class="task-info">
-                            <div class="task-title">4. シャドーイング練習</div>
-                            <div class="task-meta">残り86日</div>
-                        </div>
-                        <button class="complete-button">完了</button>
-                    </div>
-
-                    <div class="task-card">
-                        <div class="task-info">
-                            <div class="task-title">5. ネイティブスピーカーと話す</div>
-                            <div class="task-meta">残り109日</div>
-                        </div>
-                        <button class="complete-button">完了</button>
-                    </div>
-
-                    <button class="add-task-button">＋ 小タスクを追加</button>
+                    <button class="create-task-button">＋ 小タスクを追加</button>
                 </div>
             </section>
         </main>
     </div>
+    <!-- Goalのモーダル -->
     <?php echo View::forge('partials/goal_modal', [
-        'goal_modal_id' => 'add-goal-modal',
-        'close_goal_modal_id' => 'close-add-goal-modal',
+        'goal_modal_id' => 'create-goal-modal',
+        'close_goal_modal_id' => 'close-create-goal-modal',
         'modal_title' => '新しい大目標を追加',
         'modal_subtitle' => 'タイトルと締切日を設定します',
         'goal_form_action' => '/goals/create',
-        'goal_title_id' => 'add-goal-title',
-        'goal_deadline_id' => 'add-goal-deadline',
-        'cancel_goal_modal_id' => 'cancel-add-goal-modal',
+        'goal_title_id' => 'create-goal-title',
+        'goal_deadline_id' => 'create-goal-deadline',
+        'cancel_goal_modal_id' => 'cancel-create-goal-modal',
         'goal' => [],
     ]); ?>
     <?php echo View::forge('partials/goal_modal', [
@@ -148,9 +146,40 @@
         'goal' => $selected_goal,
     ], false); ?>
     <?php echo View::forge('partials/delete_goal_modal', [
-        'selected_goal' => $selected_goal,
+        'goal' => $selected_goal,
     ], false); ?>
+
+    <!-- Taskのモーダル -->
+    <?php echo View::forge('partials/task_modal', [
+        'task_modal_id' => 'create-task-modal',
+        'close_task_modal_id' => 'close-create-task-modal',
+        'modal_title' => '新しいタスクを追加',
+        'modal_subtitle' => 'タイトルと締切日を設定します',
+        'task_form_action' => '/tasks/create',
+        'task_title_id' => 'create-task-title',
+        'task_deadline_id' => 'create-task-deadline',
+        'hidden_input_id' =>  '',
+        'cancel_task_modal_id' => 'cancel-create-task-modal',
+        'goal' => $selected_goal,
+    ], false); ?>
+    <?php echo View::forge('partials/task_modal', [
+        'task_modal_id' => 'update-task-modal',
+        'close_task_modal_id' => 'close-update-task-modal',
+        'modal_title' => 'タスクを編集',
+        'modal_subtitle' => 'タイトルと締切日を設定します',
+        'task_form_action' => '/tasks/update',
+        'task_title_id' => 'update-task-title',
+        'task_deadline_id' => 'update-task-deadline',
+        'hidden_input_id' =>  'update-task-id',
+        'cancel_task_modal_id' => 'cancel-update-task-modal',
+        'goal' => $selected_goal,
+    ], false); ?>
+    <?php echo View::forge('partials/delete_task_modal', [
+        'goal' => $selected_goal,
+    ], false); ?>
+
     <script src="/assets/js/goal_modal.js"></script>
+    <script src="/assets/js/task_modal.js"></script>
 </body>
 
 </html>

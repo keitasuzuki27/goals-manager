@@ -2,13 +2,13 @@
   <div class="modal-card">
     <button type="button" class="modal-close" id="close-delete-goal-modal">×</button>
 
-    <h2 class="modal-title"><?= $selected_goal['title'] ?>  を削除</h2>
+    <h2 class="modal-title"><?= $goal['title'] ?>  を削除</h2>
     <p class="modal-subtitle">この大目標を本当に削除しますか？</p>
 
     <form method="post" action="/goals/delete">
       
       <!-- どのデータを削除するか -->
-      <input type="hidden" name="id" value="<?= $selected_goal['id'] ?>">
+      <input type="hidden" name="goal_id" value="<?= $goal['id'] ?>">
 
       <div class="modal-actions">
         <button type="button" class="cancel-button" id="cancel-delete-goal-modal">

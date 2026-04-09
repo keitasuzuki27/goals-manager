@@ -2,6 +2,7 @@
 
 class Controller_Dashboard extends Controller
 {
+
     public function action_index()
     {
         $goals = DB::select()
@@ -10,7 +11,7 @@ class Controller_Dashboard extends Controller
 
         $selected_goal = null;
 
-        #urlのidを取得
+        #urlからgoalのidを取得
         $goal_id = Input::get('id');
 
         if ($goal_id) {
@@ -25,10 +26,22 @@ class Controller_Dashboard extends Controller
             $selected_goal = $goals[0];
         }
 
+        #$selected_goalのidと紐付いたtasksを取得
+        $tasks = [];
+
+        if ($selected_goal) {
+            $tasks = DB::select()
+            ->from('tasks')
+            ->where('goal_id', '=', $selected_goal['id'])
+            ->where('deleted_at', 'IS', null)
+            ->execute();
+        }
+
         return Response::forge(
             View::forge('dashboard/index', [
                 'goals' => $goals,
                 'selected_goal' => $selected_goal,
+                'tasks' => $tasks
             ], false)
         );
     }

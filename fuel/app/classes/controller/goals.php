@@ -1,24 +1,25 @@
 <?php
 class Controller_Goals extends Controller
 {
+    # goalsのcreate
     public function action_create()
     {
         $title = Input::post('title');
         $deadline = Input::post('deadline');
 
-        # DBクラス
-        DB::insert('goals')->set([
+        list($insert_id) = DB::insert('goals')->set([
             'user_id' => 1,
             'title' => $title,
             'deadline' => $deadline,
         ])->execute();
 
-        return Response::redirect('dashboard/index');
+        return Response::redirect('/dashboard?id=' . $insert_id);
     }
 
+    # goalsのupdate
     public function action_update()
     {
-        $id = Input::post('id');
+        $goal_id = Input::post('goal_id');
         $title = Input::post('title');
         $deadline = Input::post('deadline');
 
@@ -26,20 +27,26 @@ class Controller_Goals extends Controller
             'title' => $title,
             'deadline' => $deadline,
         ])
-        ->where('id' , '=', $id)
-        ->execute();
+            ->where('id', '=', $goal_id)
+            ->execute();
 
-        return Response::redirect('dashboard/index');
+        return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
+    #goalsのdelete
     public function action_delete()
     {
-        $id = Input::post('id');
+        $goal_id = Input::post('goal_id');
+
+        #tasksを先に消去
+        DB::delete('tasks')
+            ->where('goal_id', '=', $goal_id)
+            ->execute();
 
         DB::delete('goals')
-        ->where('id' , '=', $id)
-        ->execute();
+            ->where('id', '=', $goal_id)
+            ->execute();
 
-        return Response::redirect('dashboard/index');
+        return Response::redirect('/dashboard');
     }
 }
