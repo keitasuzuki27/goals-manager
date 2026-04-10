@@ -56,16 +56,6 @@
             >
           </div>
 
-          <!-- <div class="form-group">
-            <label for="password_confirm">パスワード（確認）</label>
-            <input
-              type="password"
-              id="password_confirm"
-              name="password_confirm"
-              placeholder="もう一度入力"
-            >
-          </div> -->
-
           <button type="submit" class="register-button">ログイン</button>
         </form>
 

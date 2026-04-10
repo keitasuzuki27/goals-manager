@@ -327,6 +327,36 @@ body {
   background: #f3dede;
 }
 
+.sidebar-user {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  flex-direction: column;
+}
+
+.user-row {
+  display: flex;
+  justify-content: space-between; /* 左右に分ける */
+  align-items: center; /* 縦中央揃え */
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.logout-button {
+  padding: 6px 10px;
+  font-size: 12px;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #f5f5f5;
+}
+
 @media (max-width: 900px) {
   .dashboard {
     flex-direction: column;

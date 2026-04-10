@@ -1,27 +1,26 @@
 <?php
 
-class Controller_Dashboard extends Controller
+class Controller_Dashboard extends Controller_Base
 {
-
-    // beforeメソッドでログイン状態か確認
-    public function before()
-    {
-        parent::before();
-
-        if (!Session::get('user_id')) {
-            Response::redirect('/login');
-        }
-    }
 
     public function action_index()
     {
+        $user_id = Session::get('user_id');
+
+        $user = DB::select()
+        ->from('users')
+        ->where('id', '=', $user_id)
+        ->execute()
+        ->current();
+
         $goals = DB::select()
             ->from('goals')
+            ->where('user_id', '=', $user_id)
             ->execute();
 
         $selected_goal = null;
 
-        //urlからgoalのidを取得
+        // urlからgoalのidを取得
         $goal_id = Input::get('id');
 
         if ($goal_id) {
@@ -36,7 +35,7 @@ class Controller_Dashboard extends Controller
             $selected_goal = $goals[0];
         }
 
-        //$selected_goalのidと紐付いたtasksを取得
+        // $selected_goalのidと紐付いたtasksを取得
         $tasks = [];
 
         if ($selected_goal) {
@@ -49,6 +48,7 @@ class Controller_Dashboard extends Controller
 
         return Response::forge(
             View::forge('dashboard/index', [
+                'user' => $user,
                 'goals' => $goals,
                 'selected_goal' => $selected_goal,
                 'tasks' => $tasks

@@ -10,11 +10,6 @@ function setupModal({ openSelector, modalId, closeId, cancelId, onOpen }) {
     return;
   }
 
-  // 開く
-  //   openBtn.addEventListener("click", () => {
-  //     modal.classList.add("show");
-  //   });
-
   openBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       // UpdateとDeleteの時にはtaskのidを渡す

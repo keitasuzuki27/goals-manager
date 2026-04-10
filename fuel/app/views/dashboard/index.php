@@ -30,6 +30,17 @@
             </div>
 
             <div class="sidebar-bottom">
+                <div class="sidebar-user">
+                    <div class="user-row">
+                        <span class="user-name"><?= e($user['name']) ?></span>
+
+                        <form method="post" action="/auth/logout">
+                            <button type="submit" class="logout-button">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
                 goals manager
             </div>
         </aside>
@@ -134,6 +145,7 @@
         'goal_deadline_id' => 'create-goal-deadline',
         'cancel_goal_modal_id' => 'cancel-create-goal-modal',
         'goal' => [],
+        'user' => $user,
     ]); ?>
     <?php echo View::forge('partials/goal_modal', [
         'goal_modal_id' => 'update-goal-modal',

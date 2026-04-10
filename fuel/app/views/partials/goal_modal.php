@@ -27,8 +27,15 @@
           name="deadline">
       </div>
 
+      <!-- updateの時 -->
       <?php if (!empty($goal['id'])): ?>
         <input type="hidden" name="goal_id" value="<?= e($goal['id']) ?>">
+      <?php endif; ?>
+
+
+      <!-- createの時 -->
+      <?php if (!empty($user['id'])): ?>
+        <input type="hidden" name="user_id" value="<?= e($user['id']) ?>">
       <?php endif; ?>
 
       <div class="modal-actions">

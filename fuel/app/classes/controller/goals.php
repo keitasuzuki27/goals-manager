@@ -1,14 +1,15 @@
 <?php
-class Controller_Goals extends Controller
+class Controller_Goals extends Controller_Base
 {
-    # goalsのcreate
+    // goalsのcreate
     public function post_create()
     {
         $title = Input::post('title');
         $deadline = Input::post('deadline');
+        $user_id = Input::post('user_id');
 
         list($insert_id) = DB::insert('goals')->set([
-            'user_id' => 1,
+            'user_id' => $user_id,
             'title' => $title,
             'deadline' => $deadline,
         ])->execute();
@@ -16,7 +17,7 @@ class Controller_Goals extends Controller
         return Response::redirect('/dashboard?id=' . $insert_id);
     }
 
-    # goalsのupdate
+    // goalsのupdate
     public function post_update()
     {
         $goal_id = Input::post('goal_id');
@@ -33,12 +34,12 @@ class Controller_Goals extends Controller
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    #goalsのdelete
+    // goalsのdelete
     public function post_delete()
     {
         $goal_id = Input::post('goal_id');
 
-        #tasksを先に消去
+        // tasksを先に消去
         DB::delete('tasks')
             ->where('goal_id', '=', $goal_id)
             ->execute();

@@ -1,7 +1,7 @@
 <?php
-class Controller_Tasks extends Controller
+class Controller_Tasks extends Controller_Base
 {
-    # tasksのcreate
+    // tasksのcreate
     public function post_create()
     {
         $goal_id = Input::post('goal_id');
@@ -17,7 +17,7 @@ class Controller_Tasks extends Controller
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    # tasksのupdate
+    // tasksのupdate
     public function post_update()
     {
         $goal_id = Input::post('goal_id');
@@ -35,7 +35,7 @@ class Controller_Tasks extends Controller
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    #tasksのdelete
+    // tasksのdelete
     public function post_delete()
     {
         $goal_id = Input::post('goal_id');
@@ -48,7 +48,7 @@ class Controller_Tasks extends Controller
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    #tasksのis_doneをtoggle
+    // tasksのis_doneをtoggle
     public function post_toggle()
     {
         $goal_id = Input::post('goal_id');

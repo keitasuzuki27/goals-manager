@@ -72,4 +72,12 @@ class Controller_Auth extends Controller
 
         return Response::redirect('/dashboard');
     }
+
+    public function post_logout() 
+    {
+        Session::destroy();
+
+        return Response::redirect('/login');
+    }
 }
+ 
