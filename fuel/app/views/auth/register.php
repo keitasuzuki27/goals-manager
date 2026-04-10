@@ -23,7 +23,6 @@
       <div class="register-card">
         <div class="register-header">
           <h2>新規アカウント作成</h2>
-          <p>無料で goals manager を始めましょう</p>
         </div>
 
         <form class="register-form" action="/register/create" method="post">
@@ -33,7 +32,7 @@
               type="text"
               id="name"
               name="name"
-              placeholder="例: Keita"
+              placeholder="例: Taro"
             >
           </div>
 
@@ -57,7 +56,7 @@
             >
           </div>
 
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="password_confirm">パスワード（確認）</label>
             <input
               type="password"
@@ -65,7 +64,7 @@
               name="password_confirm"
               placeholder="もう一度入力"
             >
-          </div>
+          </div> -->
 
           <button type="submit" class="register-button">アカウントを作成</button>
         </form>
