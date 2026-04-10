@@ -52,6 +52,7 @@
                 <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
                 <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
 
+                <!-- 進捗バー -->
                 <div class="progress-wrapper">
                     <div class="progress-line">
                         <div>
