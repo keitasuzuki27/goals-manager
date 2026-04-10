@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>新規登録 | goals manager</title>
+  <title>ログイン | goals manager</title>
   <link rel="stylesheet" href="/assets/css/register.css" />
 </head>
 <body>
@@ -22,10 +22,10 @@
     <main class="register-main">
       <div class="register-card">
         <div class="register-header">
-          <h2>新規アカウント作成</h2>
+          <h2>ログイン</h2>
         </div>
 
-        <form class="register-form" action="/auth/create" method="post">
+        <form class="register-form" action="/auth/login" method="post">
           <div class="form-group">
             <label for="name">ユーザー名</label>
             <input
@@ -66,12 +66,12 @@
             >
           </div> -->
 
-          <button type="submit" class="register-button">アカウントを作成</button>
+          <button type="submit" class="register-button">ログイン</button>
         </form>
 
         <p class="login-link">
-          すでにアカウントをお持ちですか？
-          <a href="/login">ログイン</a>
+          アカウントをお持ちでない方
+          <a href="/register">新規登録</a>
         </p>
       </div>
     </main>

@@ -2,7 +2,7 @@
 class Controller_Tasks extends Controller
 {
     # tasksのcreate
-    public function action_create()
+    public function post_create()
     {
         $goal_id = Input::post('goal_id');
         $title = Input::post('title');
@@ -18,7 +18,7 @@ class Controller_Tasks extends Controller
     }
 
     # tasksのupdate
-    public function action_update()
+    public function post_update()
     {
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');
@@ -36,7 +36,7 @@ class Controller_Tasks extends Controller
     }
 
     #tasksのdelete
-    public function action_delete()
+    public function post_delete()
     {
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');
@@ -49,7 +49,7 @@ class Controller_Tasks extends Controller
     }
 
     #tasksのis_doneをtoggle
-    public function action_toggle()
+    public function post_toggle()
     {
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');

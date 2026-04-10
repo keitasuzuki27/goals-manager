@@ -2,7 +2,7 @@
 class Controller_Goals extends Controller
 {
     # goalsのcreate
-    public function action_create()
+    public function post_create()
     {
         $title = Input::post('title');
         $deadline = Input::post('deadline');
@@ -17,7 +17,7 @@ class Controller_Goals extends Controller
     }
 
     # goalsのupdate
-    public function action_update()
+    public function post_update()
     {
         $goal_id = Input::post('goal_id');
         $title = Input::post('title');
@@ -34,7 +34,7 @@ class Controller_Goals extends Controller
     }
 
     #goalsのdelete
-    public function action_delete()
+    public function post_delete()
     {
         $goal_id = Input::post('goal_id');
 
