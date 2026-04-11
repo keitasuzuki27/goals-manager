@@ -153,7 +153,7 @@ body {
 .progress-step {
   position: relative;
   z-index: 2;
-  background: #d68b43;
+  background: #d8b389;
   color: white;
   width: 34px;
   height: 34px;
@@ -164,6 +164,10 @@ body {
   font-weight: 700;
   font-size: 14px;
   margin: 0 auto 8px;
+}
+
+.progress-step.active {
+  background: #d68b43; /* 完了 */
 }
 
 .progress-labels {

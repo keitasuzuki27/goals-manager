@@ -69,32 +69,23 @@
                     <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
 
                     <!-- 進捗バー -->
-                    <div class="progress-wrapper">
-                        <div class="progress-line">
-                            <div>
-                                <div class="progress-step">1</div>
-                            </div>
-                            <div>
-                                <div class="progress-step">2</div>
-                            </div>
-                            <div>
-                                <div class="progress-step">3</div>
-                            </div>
-                            <div>
-                                <div class="progress-step">4</div>
-                            </div>
-                            <div>
-                                <div class="progress-step">5</div>
-                            </div>
-                        </div>
+                    <?php $done_count = 0;
+                    foreach ($tasks as $task) {
+                        if ($task['is_done']) {
+                            $done_count++;
+                        }
+                    } ?>
 
-                        <div class="progress-labels">
-                            <span>10月14日</span>
-                            <span>11月26日</span>
-                            <span>12月31日</span>
-                            <span>2026年2月20日</span>
-                            <span>2026年3月15日</span>
-                        </div>
+                    <?php $i = 1; ?>
+                    <div class="progress-line">
+                        <?php foreach ($tasks as $task): ?>
+                            <div>
+                                <div class="progress-step <?= $i <= $done_count ? 'active' : '' ?>">
+                                    <?= $i ?>
+                                </div>
+                            </div>
+                            <?php $i++; ?>
+                        <?php endforeach; ?>
                     </div>
 
                     <!-- tasks一覧 -->
