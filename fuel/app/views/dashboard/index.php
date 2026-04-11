@@ -47,91 +47,97 @@
 
         <main class="main">
 
-            <!-- update -->
-            <div class="top-bar">
-                <button type="button" class="icon-button update-goal-button">
-                    <i class="fa-solid fa-pen"></i>
-                </button>
-                <!-- delete -->
+            <?php if ($error = Session::get_flash('error')): ?>
+                <p class="error"><?= e($error) ?></p>
+            <?php endif; ?>
 
-                <button type="button" class="icon-button delete-goal-button">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
+            <?php if ($selected_goal): ?>
+                <!-- update -->
+                <div class="top-bar">
+                    <button type="button" class="icon-button update-goal-button">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <!-- delete -->
 
-            <section class="content-card">
-                <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
-                <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
-
-                <!-- 進捗バー -->
-                <div class="progress-wrapper">
-                    <div class="progress-line">
-                        <div>
-                            <div class="progress-step">1</div>
-                        </div>
-                        <div>
-                            <div class="progress-step">2</div>
-                        </div>
-                        <div>
-                            <div class="progress-step">3</div>
-                        </div>
-                        <div>
-                            <div class="progress-step">4</div>
-                        </div>
-                        <div>
-                            <div class="progress-step">5</div>
-                        </div>
-                    </div>
-
-                    <div class="progress-labels">
-                        <span>10月14日</span>
-                        <span>11月26日</span>
-                        <span>12月31日</span>
-                        <span>2026年2月20日</span>
-                        <span>2026年3月15日</span>
-                    </div>
+                    <button type="button" class="icon-button delete-goal-button">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
 
-                <!-- tasks一覧 -->
-                <div class="task-list">
-                    <?php foreach ($tasks as $task): ?>
-                        <div class="task-card <?= $task['is_done'] ? 'done' : '' ?>">
-                            <div class="task-info">
-                                <div class="task-title"><?= $task['title'] ?></div>
-                                <div class="task-meta"><?= $task['deadline'] ?></div>
-                            </div>
-                            <div class="task-actions">
-                                <form class="task-toggle-form" method="post" action="/tasks/toggle">
-                                    <input type="hidden" name="task_id" value="<?= e($task['id']) ?>">
-                                    <input type="hidden" name="goal_id" value="<?= $selected_goal['id'] ?>">
-                                    <button class="complete-button">完了</button>
-                                </form>
-                                <div class="task-edit-delete">
-                                    <!-- data属性でtask_modal.jsにデータを渡す -->
-                                    <button
-                                        class="update-task-button"
-                                        type="button"
-                                        data-task-id="<?= $task['id'] ?>"
-                                        data-task-title="<?= $task['title'] ?>"
-                                        data-task-deadline="<?= $task['deadline'] ?>">
-                                        編集
-                                    </button>
+                <section class="content-card">
+                    <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
+                    <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
 
-                                    <button
-                                        class="delete-task-button"
-                                        type="button"
-                                        data-task-id="<?= $task['id'] ?>"
-                                        data-task-title="<?= $task['title'] ?>">
-                                        削除
-                                    </button>
+                    <!-- 進捗バー -->
+                    <div class="progress-wrapper">
+                        <div class="progress-line">
+                            <div>
+                                <div class="progress-step">1</div>
+                            </div>
+                            <div>
+                                <div class="progress-step">2</div>
+                            </div>
+                            <div>
+                                <div class="progress-step">3</div>
+                            </div>
+                            <div>
+                                <div class="progress-step">4</div>
+                            </div>
+                            <div>
+                                <div class="progress-step">5</div>
+                            </div>
+                        </div>
+
+                        <div class="progress-labels">
+                            <span>10月14日</span>
+                            <span>11月26日</span>
+                            <span>12月31日</span>
+                            <span>2026年2月20日</span>
+                            <span>2026年3月15日</span>
+                        </div>
+                    </div>
+
+                    <!-- tasks一覧 -->
+                    <div class="task-list">
+                        <?php foreach ($tasks as $task): ?>
+                            <div class="task-card <?= $task['is_done'] ? 'done' : '' ?>">
+                                <div class="task-info">
+                                    <div class="task-title"><?= $task['title'] ?></div>
+                                    <div class="task-meta"><?= $task['deadline'] ?></div>
+                                </div>
+                                <div class="task-actions">
+                                    <form class="task-toggle-form" method="post" action="/tasks/toggle">
+                                        <input type="hidden" name="task_id" value="<?= e($task['id']) ?>">
+                                        <input type="hidden" name="goal_id" value="<?= $selected_goal['id'] ?>">
+                                        <button class="complete-button">完了</button>
+                                    </form>
+                                    <div class="task-edit-delete">
+                                        <!-- data属性でtask_modal.jsにデータを渡す -->
+                                        <button
+                                            class="update-task-button"
+                                            type="button"
+                                            data-task-id="<?= $task['id'] ?>"
+                                            data-task-title="<?= $task['title'] ?>"
+                                            data-task-deadline="<?= $task['deadline'] ?>">
+                                            編集
+                                        </button>
+
+                                        <button
+                                            class="delete-task-button"
+                                            type="button"
+                                            data-task-id="<?= $task['id'] ?>"
+                                            data-task-title="<?= $task['title'] ?>">
+                                            削除
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
 
-                    <button class="create-task-button">＋ 小タスクを追加</button>
-                </div>
-            </section>
+                        <button class="create-task-button">＋ 小タスクを追加</button>
+                    </div>
+                </section>
+            <?php endif; ?>
         </main>
     </div>
     <!-- Goalのモーダル -->

@@ -15,7 +15,8 @@
           type="text"
           id="<?= $goal_title_id ?>"
           name="title"
-          placeholder="<?= isset($goal['title']) ? '' : '例：スペイン語を学ぶ' ?>">
+          placeholder="<?= isset($goal['title']) ? '' : '例：スペイン語を学ぶ' ?>"
+          required>
       </div>
 
       <div class="form-group">
@@ -24,18 +25,13 @@
           value="<?= isset($goal['deadline']) ? e($goal['deadline']) : '' ?>"
           type="date"
           id="<?= $goal_deadline_id ?>"
-          name="deadline">
+          name="deadline"
+          required>
       </div>
 
       <!-- updateの時 -->
       <?php if (!empty($goal['id'])): ?>
         <input type="hidden" name="goal_id" value="<?= e($goal['id']) ?>">
-      <?php endif; ?>
-
-
-      <!-- createの時 -->
-      <?php if (!empty($user['id'])): ?>
-        <input type="hidden" name="user_id" value="<?= e($user['id']) ?>">
       <?php endif; ?>
 
       <div class="modal-actions">

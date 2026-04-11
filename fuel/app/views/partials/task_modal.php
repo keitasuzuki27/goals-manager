@@ -15,7 +15,8 @@
           type="text"
           id="<?= $task_title_id ?>"
           name="title"
-          placeholder="<?= isset($task['title']) ? '' : '例：文法の基礎を学ぶ' ?>">
+          placeholder="<?= isset($task['title']) ? '' : '例：文法の基礎を学ぶ' ?>"
+          required>
       </div>
 
       <div class="form-group">
@@ -24,14 +25,15 @@
           value=""
           type="date"
           id="<?= $task_deadline_id ?>"
-          name="deadline">
+          name="deadline"
+          required>
       </div>
 
       <?php if (!empty($goal['id'])): ?>
         <input type="hidden" name="goal_id" value="<?= e($goal['id']) ?>">
       <?php endif; ?>
 
-      <!-- UpdateとDeleteの時はJSからtaskのidをvalueに入れる -->
+      <!-- UpdateとDeleteの時はtask_modal.jsからtaskのidをvalueに入れる -->
       <input type="hidden" name="task_id" id="<?= $hidden_input_id ?>">
 
       <div class="modal-actions">

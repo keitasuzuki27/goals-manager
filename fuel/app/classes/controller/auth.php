@@ -45,7 +45,7 @@ class Controller_Auth extends Controller
         if (empty($errors['email'])) {
             $existing_user = DB::select()
             ->from('users')
-            ->where('email', $email)
+            ->where('email', '=', $email)
             ->execute()
             ->current();
 
@@ -68,12 +68,14 @@ class Controller_Auth extends Controller
         // ハッシュ化
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-        DB::insert('users')->set([
+        // 戻り値からuser_idを取得後、sessionに保存
+        list($user_id) = DB::insert('users')->set([
             'name' => $name,
             'email' => $email,
             'password_hash' => $password_hash,
         ])->execute();
 
+        Session::set('user_id', $user_id);
         return Response::redirect('/dashboard');
     }
 
@@ -102,7 +104,7 @@ class Controller_Auth extends Controller
             // ユーザー取得
             $user = DB::select()
                 ->from('users')
-                ->where('email', $email)
+                ->where('email', '=', $email)
                 ->execute()
                 ->current();
 
