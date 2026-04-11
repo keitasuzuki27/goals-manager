@@ -16,15 +16,53 @@ class Controller_Auth extends Controller
         );
     }
 
-    // usersのcreate
+    // userの新規登録
     public function post_create()
     {
         $name = Input::post('name');
         $email = Input::post('email');
         $password = Input::post('password');
 
-        if (!$name || !$email || !$password) {
-            return Response::redirect('/register');
+        $errors = [];
+
+        // ユーザー名のバリデーション
+        if (empty($name)) {
+            $errors['username'] = 'ユーザー名を入力してください';
+        }
+
+        // メールアドレスのバリデーション
+        if (empty($email)) {
+            $errors['email'] = 'メールアドレスを入力してください';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = '正しいメールアドレスを入力してください';
+        }
+
+        // パスワードのバリデーション
+        if (strlen($password) < 8) {
+            $errors['password'] = 'パスワードは8文字以上にしてください';
+        }
+
+        if (empty($errors['email'])) {
+            $existing_user = DB::select()
+            ->from('users')
+            ->where('email', $email)
+            ->execute()
+            ->current();
+
+            if ($existing_user) {
+                $errors['email'] = 'そのメールアドレスはすでに使われています';
+            }
+        }
+
+
+        if (!empty($errors)) {
+            return Response::forge(View::forge('auth/register', [
+                'errors' => $errors,
+                'old' => [
+                    'username' => $name,
+                    'email' => $email,
+                ]
+            ]));
         }
 
         // ハッシュ化
@@ -45,26 +83,43 @@ class Controller_Auth extends Controller
         $email = Input::post('email');
         $password = Input::post('password');
 
-        // 入力チェック
-        if (!$email || !$password) {
-            return Response::redirect('/login');
+        $errors = [];
+
+        // メールアドレスのバリデーション
+        if (empty($email)) {
+            $errors['email'] = 'メールアドレスを入力してください';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = '正しいメールアドレスを入力してください';
         }
 
-        // ユーザー取得
-        $user = DB::select()
-            ->from('users')
-            ->where('email', $email)
-            ->execute()
-            ->current();
-
-        // ユーザーがいない
-        if (!$user) {
-            return Response::redirect('/login');
+        // パスワードのバリデーション
+        if (empty($password)) {
+            $errors['password'] = 'パスワードを入力してください';
         }
 
-        // パスワード確認
-        if (!password_verify($password, $user['password_hash'])) {
-            return Response::redirect('/login');
+        if (!empty($email) && !empty($password)) {
+
+            // ユーザー取得
+            $user = DB::select()
+                ->from('users')
+                ->where('email', $email)
+                ->execute()
+                ->current();
+
+            // メールアドレス、またはパスワードが違う
+            if (!$user || !password_verify($password, $user['password_hash'])) {
+                $errors['login'] = 'メールアドレスまたはパスワードが正しくありません';
+            }
+        }
+
+        // エラーがある場合はエラーメッセージと入力されたメールアドレスを返す
+        if (!empty($errors)) {
+            return Response::forge(View::forge('auth/login', [
+                'errors' => $errors,
+                'old' => [
+                    'email' => $email,
+                ],
+            ]));
         }
 
         // ログイン成功 → セッション保存
@@ -73,11 +128,11 @@ class Controller_Auth extends Controller
         return Response::redirect('/dashboard');
     }
 
-    public function post_logout() 
+    // ログアウト処理
+    public function post_logout()
     {
         Session::destroy();
 
         return Response::redirect('/login');
     }
 }
- 
