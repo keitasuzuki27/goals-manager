@@ -71,3 +71,4 @@ setupModal({
     document.getElementById("delete-task-title").textContent = btn.dataset.taskTitle;
   },
 });
+

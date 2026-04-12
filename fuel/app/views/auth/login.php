@@ -28,9 +28,9 @@
         </div>
 
         <form class="auth-form" action="/auth/login" method="post">
-          
-        <!-- emailまたはパスワードが違う場合のエラー -->
-        <?php if (!empty($errors['login'])): ?>
+
+          <!-- emailまたはパスワードが違う場合のエラー -->
+          <?php if (!empty($errors['login'])): ?>
             <div class="form-error">
               <?= e($errors['login']) ?>
             </div>

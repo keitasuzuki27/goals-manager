@@ -64,6 +64,7 @@
           <div class="form-group">
             <label for="password">パスワード</label>
             <input
+              data-bind="value: password, valueUpdate: 'input'"
               type="password"
               id="password"
               name="password"
@@ -74,6 +75,8 @@
             <?php if (!empty($errors['password'])): ?>
               <p class="error"><?= e($errors['password']) ?></p>
             <?php endif; ?>
+            <!-- Knockout.jsでリアルタイムにエラー表示 -->
+            <p class="error" data-bind="visible: passwordError, text: passwordError"></p>
           </div>
 
           <button type="submit" class="auth-button">アカウントを作成</button>
@@ -86,6 +89,8 @@
       </div>
     </main>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"></script>
+  <script src="/assets/js/pw_validation.js"></script>
 </body>
 
 </html>

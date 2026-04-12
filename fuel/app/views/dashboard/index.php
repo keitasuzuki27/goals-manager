@@ -97,11 +97,12 @@
                                     <div class="task-meta"><?= $task['deadline'] ?></div>
                                 </div>
                                 <div class="task-actions">
-                                    <form class="task-toggle-form" method="post" action="/tasks/toggle">
-                                        <input type="hidden" name="task_id" value="<?= e($task['id']) ?>">
-                                        <input type="hidden" name="goal_id" value="<?= $selected_goal['id'] ?>">
-                                        <button class="complete-button">完了</button>
-                                    </form>
+                                    <button
+                                        class="complete-button"
+                                        data-task-id="<?= e($task['id']) ?>"
+                                        data-goal-id="<?= e($selected_goal['id']) ?>">
+                                        完了
+                                    </button>
                                     <div class="task-edit-delete">
                                         <!-- data属性でtask_modal.jsにデータを渡す -->
                                         <button
@@ -187,9 +188,9 @@
     <?php echo View::forge('partials/delete_task_modal', [
         'goal' => $selected_goal,
     ], false); ?>
-
     <script src="/assets/js/goal_modal.js"></script>
     <script src="/assets/js/task_modal.js"></script>
+    <script src="/assets/js/task_toggle.js"></script>
 </body>
 
 </html>
