@@ -77,7 +77,7 @@
                     } ?>
 
                     <?php $i = 1; ?>
-                    <div class="progress-line">
+                    <div class="progress-line" data-goal-id="<?= e($selected_goal['id']) ?>">
                         <?php foreach ($tasks as $task): ?>
                             <div>
                                 <div class="progress-step <?= $i <= $done_count ? 'active' : '' ?>">
