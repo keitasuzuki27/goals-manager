@@ -21,7 +21,7 @@
                     <?php foreach ($goals as $goal): ?>
                         <li class="<?= $selected_goal && $selected_goal['id'] == $goal['id'] ? 'active' : '' ?>">
                             <a href="/dashboard?id=<?= $goal['id'] ?>">
-                                <?= $goal['title'] ?>
+                                <?= e($goal['title']) ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
@@ -70,8 +70,8 @@
 
                 <section class="content-card">
                     <!-- goal情報 -->
-                    <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
-                    <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
+                    <h1 class="goal-title"><?= e($selected_goal['title']) ?></h1>
+                    <p class="goal-deadline">期限: <?= e($selected_goal['deadline']) ?></p>
 
                     <!-- 完了タスク数カウント -->
                     <?php $done_count = 0;
@@ -99,11 +99,11 @@
                         <?php foreach ($tasks as $task): ?>
                             <div class="task-card <?= $task['is_done'] ? 'done' : '' ?>">
                                 <div class="task-info">
-                                    <div class="task-title"><?= $task['title'] ?></div>
-                                    <div class="task-meta"><?= $task['deadline'] ?></div>
+                                    <div class="task-title"><?= e($task['title']) ?></div>
+                                    <div class="task-meta"><?= e($task['deadline']) ?></div>
                                 </div>
                                 <div class="task-actions">
-                                    <!-- タスク完了ボタン（JSで使用） -->
+                                    <!-- タスク完了ボタン -->
                                     <button
                                         class="complete-button"
                                         data-task-id="<?= e($task['id']) ?>"
@@ -115,9 +115,9 @@
                                         <button
                                             class="update-task-button"
                                             type="button"
-                                            data-task-id="<?= $task['id'] ?>"
-                                            data-task-title="<?= $task['title'] ?>"
-                                            data-task-deadline="<?= $task['deadline'] ?>">
+                                            data-task-id="<?= e($task['id']) ?>"
+                                            data-task-title="<?= e($task['title']) ?>"
+                                            data-task-deadline="<?= e($task['deadline']) ?>">
                                             編集
                                         </button>
 
@@ -125,8 +125,8 @@
                                         <button
                                             class="delete-task-button"
                                             type="button"
-                                            data-task-id="<?= $task['id'] ?>"
-                                            data-task-title="<?= $task['title'] ?>">
+                                            data-task-id="<?= e($task['id']) ?>"
+                                            data-task-title="<?= e($task['title']) ?>">
                                             削除
                                         </button>
                                     </div>
