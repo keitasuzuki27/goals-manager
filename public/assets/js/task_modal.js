@@ -1,4 +1,4 @@
-// モーダルの開閉
+// Tasks用モーダルの開閉
 
 function setupModal({ openSelector, modalId, closeId, cancelId, onOpen }) {
   const openBtn = document.querySelectorAll(openSelector);
@@ -12,7 +12,7 @@ function setupModal({ openSelector, modalId, closeId, cancelId, onOpen }) {
 
   openBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // UpdateとDeleteの時にはtaskのidを渡す
+      // UpdateとDeleteの時にはtaskの情報を渡す
       if (onOpen) {
         onOpen(btn);
       }
@@ -25,7 +25,7 @@ function setupModal({ openSelector, modalId, closeId, cancelId, onOpen }) {
     modal.classList.remove("show");
   });
 
-  // 閉じる（キャンセル）
+  // 閉じる（キャンセルボタン）
   cancelBtn.addEventListener("click", () => {
     modal.classList.remove("show");
   });
@@ -66,9 +66,9 @@ setupModal({
   modalId: "delete-task-modal",
   closeId: "close-delete-task-modal",
   cancelId: "cancel-delete-task-modal",
+  // ボタンから取得した値をモーダルのvalueに入れる
   onOpen: (btn) => {
     document.getElementById("delete-task-id").value = btn.dataset.taskId;
     document.getElementById("delete-task-title").textContent = btn.dataset.taskTitle;
   },
 });
-

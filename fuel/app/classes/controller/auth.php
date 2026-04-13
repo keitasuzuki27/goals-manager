@@ -42,19 +42,16 @@ class Controller_Auth extends Controller
             $errors['password'] = 'パスワードは8文字以上にしてください';
         }
 
+        // 同じemailを使ったアカウントが無いかを確認
         if (empty($errors['email'])) {
-            $existing_user = DB::select()
-            ->from('users')
-            ->where('email', '=', $email)
-            ->execute()
-            ->current();
+            $existing_user = Model_User::find_by_email($email);
 
             if ($existing_user) {
                 $errors['email'] = 'そのメールアドレスはすでに使われています';
             }
         }
 
-
+        // エラーメッセージとinputの入力値を返す
         if (!empty($errors)) {
             return Response::forge(View::forge('auth/register', [
                 'errors' => $errors,
@@ -79,7 +76,7 @@ class Controller_Auth extends Controller
         return Response::redirect('/dashboard');
     }
 
-    // ログイン処理（POST /login）
+    // ログイン処理
     public function post_login()
     {
         $email = Input::post('email');
@@ -102,11 +99,7 @@ class Controller_Auth extends Controller
         if (!empty($email) && !empty($password)) {
 
             // ユーザー取得
-            $user = DB::select()
-                ->from('users')
-                ->where('email', '=', $email)
-                ->execute()
-                ->current();
+            $user = Model_User::find_by_email($email);
 
             // メールアドレス、またはパスワードが違う
             if (!$user || !password_verify($password, $user['password_hash'])) {

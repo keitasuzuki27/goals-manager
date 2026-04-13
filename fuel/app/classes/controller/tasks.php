@@ -1,19 +1,23 @@
 <?php
+
 class Controller_Tasks extends Controller_Base
 {
-    // tasksのcreate
+    // tasksの新規作成（POST）
     public function post_create()
     {
+        // フォームから値取得
         $goal_id = Input::post('goal_id');
         $title = Input::post('title');
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
+        // バリデーション（goal存在チェック）
         if (empty($goal_id)) {
             Session::set_flash('error', '対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
+        // バリデーション
         if ($title === '') {
             Session::set_flash('error', 'タイトルを入力してください。');
             return Response::redirect('/dashboard?id=' . $goal_id);
@@ -24,36 +28,31 @@ class Controller_Tasks extends Controller_Base
             return Response::redirect('/dashboard?id=' . $goal_id);
         }
 
-        $goal = DB::select()
-            ->from('goals')
-            ->where('id', '=', $goal_id)
-            ->where('user_id', '=', $user_id)
-            ->execute()
-            ->current();
+        // ログインしているユーザーのgoalか確認
+        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
 
         if (!$goal) {
             Session::set_flash('error', '対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
-        DB::insert('tasks')->set([
-            'goal_id' => $goal_id,
-            'title' => $title,
-            'deadline' => $deadline,
-        ])->execute();
+        // DBにinsert
+        Model_Task::create($goal_id, $title, $deadline);
 
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    // tasksのupdate
+    // tasksの更新（POST）
     public function post_update()
     {
+        // フォームから値取得
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');
         $title = Input::post('title');
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
+        // 対象の存在チェック
         if (empty($goal_id)) {
             Session::set_flash('error', '更新対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
@@ -63,6 +62,7 @@ class Controller_Tasks extends Controller_Base
             return Response::redirect('/dashboard');
         }
 
+        // バリデーション
         if ($title === '') {
             Session::set_flash('error', 'タイトルを入力してください。');
             return Response::redirect('/dashboard?id=' . $goal_id);
@@ -73,49 +73,37 @@ class Controller_Tasks extends Controller_Base
             return Response::redirect('/dashboard?id=' . $goal_id);
         }
 
-        $goal = DB::select()
-            ->from('goals')
-            ->where('id', '=', $goal_id)
-            ->where('user_id', '=', $user_id)
-            ->execute()
-            ->current();
+        // ログインしているユーザーのgoalか確認
+        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
 
         if (!$goal) {
             Session::set_flash('error', '対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
-
-        $task = DB::select()
-            ->from('tasks')
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute()
-            ->current();
+        // taskがそのgoalに属しているか確認
+        $task = Model_Task::find_by_task_and_goal($task_id, $goal_id);
 
         if (!$task) {
             Session::set_flash('error', '対象のタスクが見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
-        DB::update('tasks')->set([
-            'title' => $title,
-            'deadline' => $deadline,
-        ])
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute();
+        // 更新処理
+        Model_Task::update($title, $deadline, $task_id, $goal_id);
 
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    // tasksのdelete
+    // tasksの削除（POST）
     public function post_delete()
     {
+        // フォームから値取得
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');
         $user_id = Session::get('user_id');
 
+        // 対象の存在チェック
         if (empty($goal_id)) {
             Session::set_flash('error', '削除対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
@@ -126,187 +114,86 @@ class Controller_Tasks extends Controller_Base
             return Response::redirect('/dashboard');
         }
 
-        $goal = DB::select()
-            ->from('goals')
-            ->where('id', '=', $goal_id)
-            ->where('user_id', '=', $user_id)
-            ->execute()
-            ->current();
+        // ログインしているユーザーのgoalか確認
+        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
 
         if (!$goal) {
             Session::set_flash('error', '対象の目標が見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
-        $task = DB::select()
-            ->from('tasks')
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute()
-            ->current();
+        // taskがそのgoalに属しているか確認
+        $task = Model_Task::find_by_task_and_goal($task_id, $goal_id);
 
         if (!$task) {
             Session::set_flash('error', '対象のタスクが見つかりませんでした。');
             return Response::redirect('/dashboard');
         }
 
-        DB::delete('tasks')
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute();
+        // 削除処理
+        Model_Task::delete($task_id, $goal_id);
 
         return Response::redirect('/dashboard?id=' . $goal_id);
     }
 
-    // tasksのis_doneをtoggle
-    // public function post_toggle()
-    // {
-    //     $goal_id = Input::post('goal_id');
-    //     $task_id = Input::post('task_id');
-    //     $user_id = Session::get('user_id');
-
-    //     if (empty($goal_id)) {
-    //         Session::set_flash('error', '対象の目標が見つかりませんでした。');
-    //         return Response::redirect('/dashboard');
-    //     }
-
-    //     if (empty($task_id)) {
-    //         Session::set_flash('error', '対象のタスクが見つかりませんでした。');
-    //         return Response::redirect('/dashboard');
-    //     }
-
-    //     $goal = DB::select()
-    //         ->from('goals')
-    //         ->where('id', '=', $goal_id)
-    //         ->where('user_id', '=', $user_id)
-    //         ->execute()
-    //         ->current();
-
-    //     if (!$goal) {
-    //         Session::set_flash('error', '対象の目標が見つかりませんでした。');
-    //         return Response::redirect('/dashboard');
-    //     }
-
-    //     $task = DB::select()
-    //         ->from('tasks')
-    //         ->where('id', '=', $task_id)
-    //         ->where('goal_id', '=', $goal_id)
-    //         ->execute()
-    //         ->current();
-
-    //     if (!$task) {
-    //         Session::set_flash('error', '対象のタスクが見つかりませんでした。');
-    //         return Response::redirect('/dashboard');
-    //     }
-
-    //     // toggle処理
-    //     $new_status = $task['is_done'] ? 0 : 1;
-
-    //     DB::update('tasks')
-    //         ->set(['is_done' => $new_status])
-    //         ->where('id', '=', $task_id)
-    //         ->where('goal_id', '=', $goal_id)
-    //         ->execute();
-
-    //     return $this->response([
-    //         'status' => 'success',
-    //         'is_done' => $new_status
-    //     ]);
-
-    //     // return Response::redirect('/dashboard?id=' . $goal_id);
-    // }
-
+    // tasksの完了/未完了の切り替え
     public function post_toggle()
     {
+        // フォームから値取得
         $goal_id = Input::post('goal_id');
         $task_id = Input::post('task_id');
         $user_id = Session::get('user_id');
 
+        // バリデーション（JSONで返す）
         if (empty($goal_id)) {
-            return Response::forge(
-                json_encode([
-                    'status' => 'error',
-                    'message' => '対象の目標が見つかりませんでした。'
-                ]),
-                400,
-                ['Content-Type' => 'application/json']
-            );
+            return Response::forge(json_encode([
+                'status' => 'error',
+                'message' => '対象の目標が見つかりませんでした。'
+            ]), 400, ['Content-Type' => 'application/json']);
         }
 
         if (empty($task_id)) {
-            return Response::forge(
-                json_encode([
-                    'status' => 'error',
-                    'message' => '対象のタスクが見つかりませんでした。'
-                ]),
-                400,
-                ['Content-Type' => 'application/json']
-            );
+            return Response::forge(json_encode([
+                'status' => 'error',
+                'message' => '対象のタスクが見つかりませんでした。'
+            ]), 400, ['Content-Type' => 'application/json']);
         }
 
-        $goal = DB::select()
-            ->from('goals')
-            ->where('id', '=', $goal_id)
-            ->where('user_id', '=', $user_id)
-            ->execute()
-            ->current();
+        // ログインしているユーザーのgoalか確認
+        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
 
         if (!$goal) {
-            return Response::forge(
-                json_encode([
-                    'status' => 'error',
-                    'message' => '対象の目標が見つかりませんでした。'
-                ]),
-                404,
-                ['Content-Type' => 'application/json']
-            );
+            return Response::forge(json_encode([
+                'status' => 'error',
+                'message' => '対象の目標が見つかりませんでした。'
+            ]), 404, ['Content-Type' => 'application/json']);
         }
 
-        $task = DB::select()
-            ->from('tasks')
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute()
-            ->current();
+        // task存在確認
+        $task = Model_Task::find_by_task_and_goal($task_id, $goal_id);
 
         if (!$task) {
-            return Response::forge(
-                json_encode([
-                    'status' => 'error',
-                    'message' => '対象のタスクが見つかりませんでした。'
-                ]),
-                404,
-                ['Content-Type' => 'application/json']
-            );
+            return Response::forge(json_encode([
+                'status' => 'error',
+                'message' => '対象のタスクが見つかりませんでした。'
+            ]), 404, ['Content-Type' => 'application/json']);
         }
 
+        // 完了状態を反転
         $new_status = $task['is_done'] ? 0 : 1;
 
-        DB::update('tasks')
-            ->set(['is_done' => $new_status])
-            ->where('id', '=', $task_id)
-            ->where('goal_id', '=', $goal_id)
-            ->execute();
+        Model_Task::update_status($new_status, $task_id, $goal_id);
 
-        // is_doneがtrueのtasksの合計を数える
-        $done_count = DB::select(DB::expr('COUNT(*) as count'))
-            ->from('tasks')
-            ->where('goal_id', '=', $goal_id)
-            ->where('is_done', '=', 1)
-            ->execute()
-            ->current();
+        // 完了済みタスク数を取得
+        $done_count = Model_Task::count_by_goal_and_status($goal_id);
 
         $done = (int) $done_count['count'];
 
-
-        return Response::forge(
-            json_encode([
-                'status' => 'success',
-                'is_done' => $new_status,
-                'done_count' => $done,
-            ]),
-            200,
-            ['Content-Type' => 'application/json']
-        );
+        // JSONレスポンスを返す
+        return Response::forge(json_encode([
+            'status' => 'success',
+            'is_done' => $new_status,
+            'done_count' => $done,
+        ]), 200, ['Content-Type' => 'application/json']);
     }
 }

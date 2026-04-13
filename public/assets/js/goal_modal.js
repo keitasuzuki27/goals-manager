@@ -1,4 +1,4 @@
-// モーダルの開閉
+// Goals用モーダルの開閉
 
 function setupModal({
     openSelector,
@@ -25,7 +25,7 @@ function setupModal({
         modal.classList.remove("show");
     });
 
-    // 閉じる（キャンセル）
+    // 閉じる（キャンセルボタン）
     cancelBtn.addEventListener("click", () => {
         modal.classList.remove("show");
     });

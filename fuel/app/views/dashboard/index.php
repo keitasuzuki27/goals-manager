@@ -17,6 +17,7 @@
                 <h2>大目標一覧</h2>
 
                 <ul class="goal-menu">
+                    <!-- goals一覧表示 -->
                     <?php foreach ($goals as $goal): ?>
                         <li class="<?= $selected_goal && $selected_goal['id'] == $goal['id'] ? 'active' : '' ?>">
                             <a href="/dashboard?id=<?= $goal['id'] ?>">
@@ -26,14 +27,17 @@
                     <?php endforeach; ?>
                 </ul>
 
+                <!-- 新規goal作成ボタン -->
                 <button class="create-goal-button">＋ 新しい大目標を追加</button>
             </div>
 
             <div class="sidebar-bottom">
                 <div class="sidebar-user">
                     <div class="user-row">
+                        <!-- ユーザー名表示 -->
                         <span class="user-name"><?= e($user['name']) ?></span>
 
+                        <!-- ログアウト -->
                         <form method="post" action="/auth/logout">
                             <button type="submit" class="logout-button">
                                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -47,17 +51,17 @@
 
         <main class="main">
 
+            <!-- エラーメッセージ表示 -->
             <?php if ($error = Session::get_flash('error')): ?>
                 <p class="error"><?= e($error) ?></p>
             <?php endif; ?>
 
             <?php if ($selected_goal): ?>
-                <!-- update -->
+                <!-- goal更新・削除ボタン -->
                 <div class="top-bar">
                     <button type="button" class="icon-button update-goal-button">
                         <i class="fa-solid fa-pen"></i>
                     </button>
-                    <!-- delete -->
 
                     <button type="button" class="icon-button delete-goal-button">
                         <i class="fa-solid fa-trash"></i>
@@ -65,10 +69,11 @@
                 </div>
 
                 <section class="content-card">
+                    <!-- goal情報 -->
                     <h1 class="goal-title"><?= $selected_goal['title'] ?></h1>
                     <p class="goal-deadline">期限: <?= $selected_goal['deadline'] ?></p>
 
-                    <!-- 進捗バー -->
+                    <!-- 完了タスク数カウント -->
                     <?php $done_count = 0;
                     foreach ($tasks as $task) {
                         if ($task['is_done']) {
@@ -76,6 +81,7 @@
                         }
                     } ?>
 
+                    <!-- 進捗バー -->
                     <?php $i = 1; ?>
                     <div class="progress-line" data-goal-id="<?= e($selected_goal['id']) ?>">
                         <?php foreach ($tasks as $task): ?>
@@ -88,7 +94,7 @@
                         <?php endforeach; ?>
                     </div>
 
-                    <!-- tasks一覧 -->
+                    <!-- タスク一覧 -->
                     <div class="task-list">
                         <?php foreach ($tasks as $task): ?>
                             <div class="task-card <?= $task['is_done'] ? 'done' : '' ?>">
@@ -97,6 +103,7 @@
                                     <div class="task-meta"><?= $task['deadline'] ?></div>
                                 </div>
                                 <div class="task-actions">
+                                    <!-- タスク完了ボタン（JSで使用） -->
                                     <button
                                         class="complete-button"
                                         data-task-id="<?= e($task['id']) ?>"
@@ -104,7 +111,7 @@
                                         完了
                                     </button>
                                     <div class="task-edit-delete">
-                                        <!-- data属性でtask_modal.jsにデータを渡す -->
+                                        <!-- 編集用データをdata属性で渡す -->
                                         <button
                                             class="update-task-button"
                                             type="button"
@@ -114,6 +121,7 @@
                                             編集
                                         </button>
 
+                                        <!-- 削除用データ -->
                                         <button
                                             class="delete-task-button"
                                             type="button"
@@ -126,13 +134,14 @@
                             </div>
                         <?php endforeach; ?>
 
+                        <!-- タスク作成 -->
                         <button class="create-task-button">＋ 小タスクを追加</button>
                     </div>
                 </section>
             <?php endif; ?>
         </main>
     </div>
-    <!-- Goalのモーダル -->
+    <!-- Goal新規作成モーダル -->
     <?php echo View::forge('partials/goal_modal', [
         'goal_modal_id' => 'create-goal-modal',
         'close_goal_modal_id' => 'close-create-goal-modal',
@@ -145,6 +154,7 @@
         'goal' => [],
         'user' => $user,
     ]); ?>
+    <!-- Goal編集モーダル -->
     <?php echo View::forge('partials/goal_modal', [
         'goal_modal_id' => 'update-goal-modal',
         'close_goal_modal_id' => 'close-update-goal-modal',
@@ -156,11 +166,12 @@
         'cancel_goal_modal_id' => 'cancel-update-goal-modal',
         'goal' => $selected_goal,
     ], false); ?>
+    <!-- Goal消去モーダル -->
     <?php echo View::forge('partials/delete_goal_modal', [
         'goal' => $selected_goal,
     ], false); ?>
 
-    <!-- Taskのモーダル -->
+    <!-- Task新規作成モーダル -->
     <?php echo View::forge('partials/task_modal', [
         'task_modal_id' => 'create-task-modal',
         'close_task_modal_id' => 'close-create-task-modal',
@@ -173,6 +184,7 @@
         'cancel_task_modal_id' => 'cancel-create-task-modal',
         'goal' => $selected_goal,
     ], false); ?>
+    <!-- Task編集モーダル -->
     <?php echo View::forge('partials/task_modal', [
         'task_modal_id' => 'update-task-modal',
         'close_task_modal_id' => 'close-update-task-modal',
@@ -185,9 +197,11 @@
         'cancel_task_modal_id' => 'cancel-update-task-modal',
         'goal' => $selected_goal,
     ], false); ?>
+    <!-- Task消去モーダル -->
     <?php echo View::forge('partials/delete_task_modal', [
         'goal' => $selected_goal,
     ], false); ?>
+    <!-- JS読み込み(モーダルの開閉処理) -->
     <script src="/assets/js/goal_modal.js"></script>
     <script src="/assets/js/task_modal.js"></script>
     <script src="/assets/js/task_toggle.js"></script>
