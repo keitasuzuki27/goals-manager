@@ -18,7 +18,7 @@ class Controller_Dashboard extends Controller_Base
         $goal_id = Input::get('id');
 
         if ($goal_id) {
-            $selected_goal = Model_Goal::find($goal_id);
+            $selected_goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
         }
 
         // $selected_goal = nullの場合、最初のgoalを設定
