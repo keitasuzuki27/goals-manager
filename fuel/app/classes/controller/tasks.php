@@ -11,29 +11,17 @@ class Controller_Tasks extends Controller_Base
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
-        // バリデーション（goal存在チェック）
-        if (empty($goal_id)) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+
+        // goalの存在と所有チェック
+        $goal_or_resp = $this->ensure_goal_belongs_to_user_or_redirect($goal_id, $user_id, 'dashboard');
+        if ($goal_or_resp instanceof Response) {
+            return $goal_or_resp;
         }
 
-        // バリデーション
-        if ($title === '') {
-            Session::set_flash('error', 'タイトルを入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
-        }
-
-        if (empty($deadline)) {
-            Session::set_flash('error', '締切日を入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
-        }
-
-        // ログインしているユーザーのgoalか確認
-        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
-
-        if (!$goal) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // タイトルと期日のバリデーション
+        $valid = $this->validate_title_and_deadline_or_redirect($title, $deadline, '/dashboard?id=' . $goal_id);
+        if ($valid !== true) {
+            return $valid;
         }
 
         // DBにinsert
@@ -52,41 +40,23 @@ class Controller_Tasks extends Controller_Base
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
-        // 対象の存在チェック
-        if (empty($goal_id)) {
-            Session::set_flash('error', '更新対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
-        }
-        if (empty($task_id)) {
-            Session::set_flash('error', '更新対象のタスクが見つかりませんでした。');
-            return Response::redirect('/dashboard');
+
+        // goalの存在と所有チェック
+        $goal_or_resp = $this->ensure_goal_belongs_to_user_or_redirect($goal_id, $user_id, 'dashboard');
+        if ($goal_or_resp instanceof Response) {
+            return $goal_or_resp;
         }
 
-        // バリデーション
-        if ($title === '') {
-            Session::set_flash('error', 'タイトルを入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
+        // taskの存在とgoalに属しているかをチェック
+        $task_or_resp = $this->ensure_task_belongs_to_goal_or_redirect($task_id, $goal_id, '/dashboard');
+        if ($task_or_resp instanceof Response) {
+            return $task_or_resp;
         }
 
-        if (empty($deadline)) {
-            Session::set_flash('error', '締切日を入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
-        }
-
-        // ログインしているユーザーのgoalか確認
-        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
-
-        if (!$goal) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
-        }
-
-        // taskがそのgoalに属しているか確認
-        $task = Model_Task::find_by_task_and_goal($task_id, $goal_id);
-
-        if (!$task) {
-            Session::set_flash('error', '対象のタスクが見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // タイトルと期日のバリデーション
+        $valid = $this->validate_title_and_deadline_or_redirect($title, $deadline, '/dashboard?id=' . $goal_id);
+        if ($valid !== true) {
+            return $valid;
         }
 
         // 更新処理
@@ -103,31 +73,16 @@ class Controller_Tasks extends Controller_Base
         $task_id = Input::post('task_id');
         $user_id = Session::get('user_id');
 
-        // 対象の存在チェック
-        if (empty($goal_id)) {
-            Session::set_flash('error', '削除対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // goalの存在と所有チェック
+        $goal_or_resp = $this->ensure_goal_belongs_to_user_or_redirect($goal_id, $user_id, 'dashboard');
+        if ($goal_or_resp instanceof Response) {
+            return $goal_or_resp;
         }
 
-        if (empty($task_id)) {
-            Session::set_flash('error', '削除対象のタスクが見つかりませんでした。');
-            return Response::redirect('/dashboard');
-        }
-
-        // ログインしているユーザーのgoalか確認
-        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
-
-        if (!$goal) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
-        }
-
-        // taskがそのgoalに属しているか確認
-        $task = Model_Task::find_by_task_and_goal($task_id, $goal_id);
-
-        if (!$task) {
-            Session::set_flash('error', '対象のタスクが見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // taskの存在とgoalに属しているかをチェック
+        $task_or_resp = $this->ensure_task_belongs_to_goal_or_redirect($task_id, $goal_id, '/dashboard');
+        if ($task_or_resp instanceof Response) {
+            return $task_or_resp;
         }
 
         // 削除処理

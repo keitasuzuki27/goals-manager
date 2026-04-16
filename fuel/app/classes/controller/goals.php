@@ -9,15 +9,10 @@ class Controller_Goals extends Controller_Base
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
-        // バリデーション
-        if ($title === '') {
-            Session::set_flash('error', 'タイトルを入力してください。');
-            return Response::redirect('/dashboard');
-        }
-
-        if (empty($deadline)) {
-            Session::set_flash('error', '締切日を入力してください。');
-            return Response::redirect('/dashboard');
+        // タイトルと期日のバリデーション
+        $valid = $this->validate_title_and_deadline_or_redirect($title, $deadline, '/dashboard');
+        if ($valid !== true) {
+            return $valid;
         }
 
         // DBにinsertし、生成されたidを取得
@@ -36,29 +31,16 @@ class Controller_Goals extends Controller_Base
         $deadline = Input::post('deadline');
         $user_id = Session::get('user_id');
 
-        // 更新対象の存在チェック
-        if (empty($goal_id)) {
-            Session::set_flash('error', '更新対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // goalの存在と所有チェック
+        $goal_or_resp = $this->ensure_goal_belongs_to_user_or_redirect($goal_id, $user_id, 'dashboard');
+        if ($goal_or_resp instanceof Response) {
+            return $goal_or_resp;
         }
 
-        // バリデーション
-        if ($title === '') {
-            Session::set_flash('error', 'タイトルを入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
-        }
-
-        if (empty($deadline)) {
-            Session::set_flash('error', '締切日を入力してください。');
-            return Response::redirect('/dashboard?id=' . $goal_id);
-        }
-
-        // ログインしているユーザーのgoalか確認
-        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
-
-        if (!$goal) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // タイトルと期日のバリデーション
+        $valid = $this->validate_title_and_deadline_or_redirect($title, $deadline, '/dashboard?id=' . $goal_id);
+        if ($valid !== true) {
+            return $valid;
         }
 
         // 更新処理
@@ -74,18 +56,10 @@ class Controller_Goals extends Controller_Base
         $goal_id = Input::post('goal_id');
         $user_id = Session::get('user_id');
 
-        // 削除対象の存在チェック
-        if (empty($goal_id)) {
-            Session::set_flash('error', '削除対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
-        }
-
-        // ログインしているユーザーのgoalか確認
-        $goal = Model_Goal::find_by_user_and_id($goal_id, $user_id);
-
-        if (!$goal) {
-            Session::set_flash('error', '対象の目標が見つかりませんでした。');
-            return Response::redirect('/dashboard');
+        // goalの存在と所有チェック
+        $goal_or_resp = $this->ensure_goal_belongs_to_user_or_redirect($goal_id, $user_id, 'dashboard');
+        if ($goal_or_resp instanceof Response) {
+            return $goal_or_resp;
         }
 
         // 関連するtasksを先に削除（外部キー対策）
